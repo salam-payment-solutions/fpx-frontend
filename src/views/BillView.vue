@@ -7,8 +7,12 @@ import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
 
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import { PaymentService } from '@/services/payment.service'
+import { zBoolean } from '@/lib/helpers/schema-helpers'
 
+const paymentService = new PaymentService()
+const bankList = ['Bank Islam', 'Bank Rakyat', 'CIMB Bank', 'Maybank']
 const formSchema = toTypedSchema(
     z.object({
         amount: z.coerce.number().min(1).default(0),
@@ -16,20 +20,27 @@ const formSchema = toTypedSchema(
         name: z.string().min(2).max(100),
         phone: z.string().min(10).max(15),
         bank: z.string(),
-        agree: z.boolean().refine((val) => val, {
-            message: 'You must agree to the terms and conditions',
-        }),
+        agree: z
+            .boolean()
+            .optional()
+            .refine((value) => value === true, {
+                message: 'You must agree to the terms and conditions',
+            }),
     }),
 )
-
+const form = useForm({
+    validationSchema: formSchema,
+    // initialErrors: { agree: false}
+})
 const billData = ref({
+    imageLink: 'https://i.pinimg.com/736x/eb/23/bf/eb23bfda14bbfe4ad08d6a2b4b4cdb3c.jpg',
     title: 'Gym Membership Fee',
     description:
         'Monthly membership payment for full access to gym equipment, personal training sessions, and group fitness classes. Includes locker usage and wellness facilities.',
 })
 
-const form = useForm({
-    validationSchema: formSchema,
+onMounted(async () => {
+    await paymentService.getBankList()
 })
 
 const onSubmit = form.handleSubmit((values) => {
@@ -39,17 +50,22 @@ const onSubmit = form.handleSubmit((values) => {
 </script>
 
 <template>
-    <div class="flex min-h-screen min-w-screen bg-gray-100">
-        <div class="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow h-fit">
+    <div class="flex min-h-screen min-w-screen bg-gray-100 p-4">
+        <div class="max-w-md mx-auto p-6 bg-white rounded shadow h-fit">
             <h1 class="text-2xl font-bold">{{ billData.title }}</h1>
-            <p class="mt-2">{{ billData.description }}</p>
+            <img
+                :src="billData.imageLink"
+                :alt="billData.title"
+                class="w-full h-48 object-contain mt-4 rounded-md border"
+            />
+            <p class="mt-4">{{ billData.description }}</p>
 
             <hr class="my-4" />
-            <p class="mb-4 font-semibold">Fill in the details</p>
+            <p class="mb-4 font-semibold">Enter your details to proceed with payment</p>
             <form @submit="onSubmit">
                 <FormField v-slot="{ componentField }" name="amount">
                     <FormItem>
-                        <FormLabel>Amount (RM)</FormLabel>
+                        <FormLabel class="label-required">Amount (RM)</FormLabel>
                         <div class="flex items-center">
                             <FormControl class="flex-1">
                                 <NumberField
@@ -72,7 +88,7 @@ const onSubmit = form.handleSubmit((values) => {
                 </FormField>
                 <FormField v-slot="{ componentField }" name="email">
                     <FormItem>
-                        <FormLabel class="mt-4">Email</FormLabel>
+                        <FormLabel class="mt-4 label-required">Email</FormLabel>
                         <FormControl>
                             <Input type="email" v-bind="componentField" />
                         </FormControl>
@@ -81,7 +97,7 @@ const onSubmit = form.handleSubmit((values) => {
                 </FormField>
                 <FormField v-slot="{ componentField }" name="name">
                     <FormItem>
-                        <FormLabel class="mt-4">Name</FormLabel>
+                        <FormLabel class="mt-4 label-required">Name</FormLabel>
                         <FormControl>
                             <Input type="text" v-bind="componentField" />
                         </FormControl>
@@ -90,7 +106,7 @@ const onSubmit = form.handleSubmit((values) => {
                 </FormField>
                 <FormField v-slot="{ componentField }" name="phone">
                     <FormItem>
-                        <FormLabel class="mt-4">Phone Number</FormLabel>
+                        <FormLabel class="mt-4 label-required">Phone Number</FormLabel>
                         <FormControl>
                             <Input type="text" placeholder="0123456789" v-bind="componentField" />
                         </FormControl>
@@ -99,29 +115,31 @@ const onSubmit = form.handleSubmit((values) => {
                 </FormField>
                 <FormField v-slot="{ componentField }" name="bank">
                     <FormItem>
-                        <FormLabel class="mt-4">Bank Selection</FormLabel>
+                        <FormLabel class="mt-4 label-required">Bank Selection</FormLabel>
                         <FormControl>
                             <Select v-bind="componentField">
                                 <SelectTrigger class="w-full">
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="light">Light</SelectItem>
-                                    <SelectItem value="light">Light</SelectItem>
-                                    <SelectItem value="dark">Dark</SelectItem>
-                                    <SelectItem value="system">System</SelectItem>
+                                    <SelectItem
+                                        v-for="bank in bankList"
+                                        :key="bank"
+                                        :value="bank"
+                                        >{{ bank }}</SelectItem
+                                    >
                                 </SelectContent>
                             </Select>
                         </FormControl>
                         <FormMessage />
                     </FormItem>
                 </FormField>
-                <FormField v-slot="{ componentField }" name="agree">
+                <FormField v-slot="{ componentField }" name="agree" type="checkbox">
                     <FormItem>
                         <div class="flex mt-4">
                             <FormControl>
                                 <Checkbox v-bind="componentField" />
-                                <FormLabel for="agree" class="ml-2"
+                                <FormLabel class="ml-2 label-required"
                                     >I agree to the
                                     <a
                                         href="https://www.mepsfpx.com.my/FPXMain/termsAndConditions.jsp"

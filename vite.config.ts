@@ -7,14 +7,10 @@ import path from 'node:path'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [vue(), vueJsx(), vueDevTools(), tailwindcss()],
-  resolve: {
-    // alias: {
-    //   // '@': fileURLToPath(new URL('./src', import.meta.url)),
-    //   '@': path.resolve(__dirname, './src'),
-    // },
-    alias: {
-      '@': path.resolve(__dirname, './src'),
+    plugins: [vue(), vueJsx(), vueDevTools(), tailwindcss()],
+    resolve: {
+        alias: {
+            '@': path.resolve(__dirname, './src'),
+        },
     },
-  },
 })

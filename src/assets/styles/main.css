@@ -94,4 +94,9 @@
     label[data-error='true'] ~ button[data-slot='select-trigger'] {
         border-color: var(--destructive-foreground) !important;
     }
+
+    .label-required::after {
+        content: ' *';
+        color: var(--destructive-foreground);
+    }
 }

@@ -1,7 +1,7 @@
 import { PaymentMessageToken } from 'src/enums/payment/payment-message-token'
 import { PaymentMessageType } from 'src/enums/payment/payment-message-type'
 
-export interface FPXRequestPayment {
+export interface FPXCreatePaymentRequest {
     fpx_buyerBankId: string //limit 10 character
     fpx_buyerEmail?: string // limit 50 character with valid email
     fpx_checkSum: string // no limit
