@@ -9,10 +9,10 @@ import * as z from 'zod'
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { onMounted, ref } from 'vue'
 import { PaymentService } from '@/services/payment.service'
-import { zBoolean } from '@/lib/helpers/schema-helpers'
+import type { Bank } from '@/models/payment/Bank.model'
 
 const paymentService = new PaymentService()
-const bankList = ['Bank Islam', 'Bank Rakyat', 'CIMB Bank', 'Maybank']
+const bankList = ref<Bank[]>([])
 const formSchema = toTypedSchema(
     z.object({
         amount: z.coerce.number().min(1).default(0),
@@ -40,7 +40,7 @@ const billData = ref({
 })
 
 onMounted(async () => {
-    await paymentService.getBankList()
+    bankList.value = await paymentService.getBankList()
 })
 
 const onSubmit = form.handleSubmit((values) => {
@@ -124,9 +124,9 @@ const onSubmit = form.handleSubmit((values) => {
                                 <SelectContent>
                                     <SelectItem
                                         v-for="bank in bankList"
-                                        :key="bank"
-                                        :value="bank"
-                                        >{{ bank }}</SelectItem
+                                        :key="`bank-id-${bank.id}`"
+                                        :value="bank.code"
+                                        >{{ bank.displayName }}</SelectItem
                                     >
                                 </SelectContent>
                             </Select>
