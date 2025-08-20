@@ -1,0 +1,67 @@
+<!doctype html>
+
+<html lang="en">
+    <head>
+        <title>Please Wait..</title>
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta http-equiv="Pragma" content="no-cache" />
+        <meta http-equiv="Expires" content="0" />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <link rel="Shortcut icon" href="favicon.ico" />
+        <link rel="icon" type="image/gif" href="favicon1.gif" />
+
+        <link href="css/bootstrap/bootstrap.css" rel="stylesheet" />
+
+        <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+        <!--[if lt IE 9
+            ]><script src="../../assets/js/ie8-responsive-file-warning.js"></script
+        ><![endif]-->
+        <!--<script src="test_files/ie-emulation-modes-warning.js"></script>-->
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+
+        <script src="css/bootstrap/respond.src.js"></script>
+        <link
+            href="https://uat.mepsfpx.com.my/FPXMain//css/bootstrap/respond-proxy.html"
+            id="respond-proxy"
+            rel="respond-proxy"
+        />
+        <link href="css/bootstrap/respond.proxy.gif" id="respond-redirect" rel="respond-redirect" />
+        <script src="css/bootstrap/respond.proxy.js"></script>
+        <script>
+            window.name = 'seller'
+            function openSeller() {
+                document.forms[0].action = ''
+                document.forms[0].submit()
+            }
+        </script>
+    </head>
+    <body onLoad="javascript:openSeller();" class="jumbotron">
+        <div class="container">
+            <h4>You are now being redirected to the merchant's site...</h4>
+            <form method="post" target="seller" onSubmit="javascript:openSeller()">
+                <input type="hidden" name="fpx_creditAuthNo" value="" /><input
+                    type="hidden"
+                    name="fpx_creditAuthCode"
+                    value=""
+                /><input type="hidden" name="fpx_msgType" value="AC" /><input
+                    type="hidden"
+                    name="fpx_fpxTxnTime"
+                    value=""
+                /><input
+                    type="hidden"
+                    name="fpx_checkSum"
+                    value="57CE73F6029D36D00EE2AB3DD2747E2077EE3255221B8207A6CFE7F8BE5C01F4581258F7B3C716DBEF8E368EDE029E527CDF8AD69E921EC212B007FC964788076D37D140FF9772BBCC87F562BCCFF649FD0EB1575892A06E2F7BCEB394BF5DE3816F7A7D5926926F2C90A2B51098C196778E399CD30517712A8D3266161EAE9992BE3AE15BD20E58CD60A7B1BB4F18A4E5ECB8F13DB5D712F98DC74D4D5CB3AC70422C415999C6095E382A18CD0D2231AED17CC75BBE16CD42C76A51AA9F0AF677931AA0C2C72FE06F2D936BFAA1A66C4ADB87F121893FB5B154D48767C687F93FC65C1E164E1C587A782CC05C21AD6C0039BA10593AC71C56210D7605D4BBD3"
+                /><input type="hidden" name="fpx_debitAuthNo" value="" /><input
+                    type="hidden"
+                    name="fpx_debitAuthCode"
+                    value="FE"
+                /><input type="hidden" name="fpx_fpxTxnId" value="" />
+            </form>
+        </div>
+    </body>
+</html>

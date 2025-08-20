@@ -10,15 +10,30 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/comp
 import { onMounted, ref } from 'vue'
 import { PaymentService } from '@/services/payment.service'
 import type { Bank } from '@/models/payment/Bank.model'
+import { PaymentMessageToken } from '@/enums/payment/payment-message-token'
+import type { CreatePaymentRequet } from '@/models/payment/CreatePaymentRequet.model'
+import { format } from 'date-fns-tz'
+import { PaymentConfig } from '@/config/payment.confiig'
 
 const paymentService = new PaymentService()
 const bankList = ref<Bank[]>([])
+const paymentTypes = [
+    {
+        name: 'Personal Banking',
+        value: PaymentMessageToken.B2C,
+    },
+    {
+        name: 'Business Banking',
+        value: PaymentMessageToken.B2B1,
+    },
+]
 const formSchema = toTypedSchema(
     z.object({
         amount: z.coerce.number().min(1).default(0),
         email: z.string().email().max(50),
         name: z.string().min(2).max(100),
         phone: z.string().min(10).max(15),
+        type: z.enum(Object.values(PaymentMessageToken) as [string, ...string[]]),
         bank: z.string(),
         agree: z
             .boolean()
@@ -30,22 +45,55 @@ const formSchema = toTypedSchema(
 )
 const form = useForm({
     validationSchema: formSchema,
-    // initialErrors: { agree: false}
+    initialValues: {
+        type: PaymentMessageToken.B2C.toString(),
+    },
 })
 const billData = ref({
     imageLink: 'https://i.pinimg.com/736x/eb/23/bf/eb23bfda14bbfe4ad08d6a2b4b4cdb3c.jpg',
     title: 'Gym Membership Fee',
-    description:
-        'Monthly membership payment for full access to gym equipment, personal training sessions, and group fitness classes. Includes locker usage and wellness facilities.',
+    description: 'Monthly Gym & Wellness Pass',
 })
 
 onMounted(async () => {
     bankList.value = await paymentService.getBankList()
 })
 
-const onSubmit = form.handleSubmit((values) => {
-    alert('form submitted')
-    console.log('Form submitted!', values)
+const onSubmit = form.handleSubmit(async (values) => {
+    const formattedDate = format(new Date(), 'yyyyMMddHHmmss', { timeZone: 'UTC' })
+    const randomNumber = Math.floor(Math.random() * 10000)
+
+    const referenceNo = `SP${formattedDate}${randomNumber}`
+
+    const request: CreatePaymentRequet = {
+        referenceNo: referenceNo,
+        description: billData.value.description,
+        type: PaymentMessageToken.B2C,
+        payerEmail: values.email,
+        payerName: values.name,
+        payerPhone: values.phone,
+        amount: values.amount.toFixed(2),
+        bankCode: values.bank,
+    }
+
+    await paymentService.createPayment(request).then((response) => {
+        const form = document.createElement('form')
+        form.setAttribute('method', 'POST')
+        form.setAttribute('action', PaymentConfig.FPX_CREATE_PAYMENT_URL)
+
+        console.log('form:', form)
+
+        Object.entries(response).forEach(([key, value]) => {
+            const input = document.createElement('input')
+            input.setAttribute('type', 'hidden')
+            input.setAttribute('name', key)
+            input.setAttribute('value', value || '')
+            form.appendChild(input)
+        })
+
+        document.body.appendChild(form)
+        form.submit()
+    })
 })
 </script>
 
@@ -109,6 +157,27 @@ const onSubmit = form.handleSubmit((values) => {
                         <FormLabel class="mt-4 label-required">Phone Number</FormLabel>
                         <FormControl>
                             <Input type="text" placeholder="0123456789" v-bind="componentField" />
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                </FormField>
+                <FormField v-slot="{ componentField }" name="type">
+                    <FormItem>
+                        <FormLabel class="mt-4 label-required">Type</FormLabel>
+                        <FormControl>
+                            <Select v-bind="componentField">
+                                <SelectTrigger class="w-full">
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem
+                                        v-for="payment in paymentTypes"
+                                        :key="`payment-type-${payment.value}`"
+                                        :value="payment.value"
+                                        >{{ payment.name }}</SelectItem
+                                    >
+                                </SelectContent>
+                            </Select>
                         </FormControl>
                         <FormMessage />
                     </FormItem>
