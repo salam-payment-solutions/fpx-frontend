@@ -32,7 +32,7 @@ import {
 import SelectGroup from './components/ui/select/SelectGroup.vue'
 import SelectItemText from './components/ui/select/SelectItemText.vue'
 
-export let RegisterComponent = (app: App<Element>) => {
+export const RegisterComponent = (app: App<Element>) => {
     app.component('Button', Button)
     app.component('Checkbox', Checkbox)
     app.component('ErrorMessage', ErrorMessage)

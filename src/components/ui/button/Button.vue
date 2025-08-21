@@ -19,6 +19,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 <template>
   <Primitive
+    class="cursor-pointer"
     data-slot="button"
     :as="as"
     :as-child="asChild"

@@ -1,6 +1,6 @@
-@utility custom-asset {
-  background-size: cover; /* or contain / custom size */
-  background-position: center; /* controls position */
-  background-repeat: no-repeat; /* prevents tiling */
+/* @utility custom-asset {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   background-size: contain;
-}
+} */

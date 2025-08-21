@@ -1,5 +1,6 @@
 import type { PaymentMessageToken } from '@/enums/payment/payment-message-token'
 import type { PaymentStatus } from '@/enums/payment/PaymentStatus.enum'
+import type { Bank } from './Bank.model'
 
 export interface GetPaymentDetailsResponse {
     transactionId?: string
@@ -18,5 +19,5 @@ export interface GetPaymentDetailsResponse {
     createdAt?: Date | string
     updatedAt?: Date | string
     // fpxSellerExchange: FpxSellerExchangeCreateNestedOneWithoutPaymentsInput;
-    // bank: Prisma.BankCreateNestedOneWithoutPaymentsInput;
+    bank?: Bank
 }

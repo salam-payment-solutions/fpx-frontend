@@ -3,13 +3,14 @@ import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import tailwindcss from '@tailwindcss/vite'
+import svgLoader from 'vite-svg-loader'
 import path from 'node:path'
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, process.cwd(), '')
     return {
-        plugins: [vue(), vueJsx(), vueDevTools(), tailwindcss()],
+        plugins: [vue(), vueJsx(), vueDevTools(), tailwindcss(), svgLoader()],
         resolve: {
             alias: {
                 '@': path.resolve(__dirname, './src'),

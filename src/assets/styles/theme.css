@@ -44,7 +44,7 @@
     /* custom background image */
     --background-image-main-logo: url('/src/assets/salam-logo.jpeg');
     --background-image-home: url('/src/assets/images/home.svg');
-    --background-image-home: url('/src/assets/images/home.svg');
+    --background-image-outline-check: url('/src/assets/images/outline-check.svg');
 
     @keyframes accordion-down {
         from {

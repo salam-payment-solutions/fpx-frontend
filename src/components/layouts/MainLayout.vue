@@ -3,6 +3,7 @@ import { type MenuList, menuList } from '@/config/menu.config'
 import { ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import { Button } from '@/components/ui/button'
+import MenueSvg from '@/assets/images/menu.svg'
 
 const menu = ref<MenuList[]>(menuList)
 const currentMenu = ref<MenuList | null>(null)
@@ -34,7 +35,7 @@ watchEffect(() => {
     <div class="w-96 flex flex-col flex-1">
       <div class="h-14 shadow-lg border-b flex justify-between items-center">
         <Button variant="ghost" class="mx-2">
-          <div class="custom-asset bg-menu h-8 w-8"></div>
+          <MenueSvg class="w-6 h-6" />
         </Button>
       </div>
       <div class="flex-1 overflow-auto bg-gray-100">

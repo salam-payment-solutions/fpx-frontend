@@ -1,6 +1,3 @@
-Build your form Based on last step we can either use
-<Form />
-component or useForm composable useForm is recommended because values are typed automatically vue
 <script setup lang="ts">
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
