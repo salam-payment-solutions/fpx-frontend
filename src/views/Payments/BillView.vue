@@ -11,6 +11,13 @@ import { PaymentMessageToken } from '@/enums/payment/payment-message-token'
 import type { CreatePaymentRequet } from '@/models/payment/CreatePaymentRequet.model'
 import { format } from 'date-fns-tz'
 import { PaymentConfig } from '@/config/payment.confiig'
+import {
+    Select,
+    SelectContent,
+    SelectItemText,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select'
 
 const paymentService = new PaymentService()
 const bankList = ref<Bank[]>([])
@@ -188,11 +195,11 @@ const onSubmit = form.handleSubmit(async (values) => {
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem
+                                    <SelectItemText
                                         v-for="bank in bankList"
                                         :key="`bank-id-${bank.id}`"
                                         :value="bank.code"
-                                        >{{ bank.displayName }}</SelectItem
+                                        >{{ bank.displayName }}</SelectItemText
                                     >
                                 </SelectContent>
                             </Select>

@@ -5,7 +5,6 @@ import { createPinia } from 'pinia'
 
 import App from './App.vue'
 import router from './router'
-import { ErrorMessage, Field, Form } from 'vee-validate'
 import { RegisterComponent } from './main.component'
 
 const app = createApp(App)

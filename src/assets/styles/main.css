@@ -78,6 +78,10 @@
 }
 
 @layer base {
+    html:has(.main-layout) {
+        overflow: hidden;
+    }
+
     #app {
         min-width: 100vw;
         min-height: 100vh;

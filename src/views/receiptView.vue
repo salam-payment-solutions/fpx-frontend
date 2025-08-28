@@ -41,7 +41,7 @@ import type { FPXDirectPaymentResponse } from '@/models/payment/FPXDirectPayment
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { PaymentService } from '@/services/payment.service';
-import type { GetPaymentDetailsResponse } from '@/models/payment/GetPaymentDetailsResponse.model';
+import type { GetPaymentResponse } from '@/models/payment/GetPaymentResponse.model';
 import { PaymentMessageToken } from '@/enums/payment/payment-message-token';
 import CircleCheck from "@/assets/images/circle-check.svg";
 import CircleX from "@/assets/images/circle-x.svg";
@@ -59,7 +59,7 @@ onMounted(async () => {
   await getPaymentReceipt();
 });
 
-const receipt = ref<GetPaymentDetailsResponse>({
+const receipt = ref<GetPaymentResponse>({
   amount: 0,
   updatedAt: new Date().toLocaleString(),
   exchangeOrderNo: '',

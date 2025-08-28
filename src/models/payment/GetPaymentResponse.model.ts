@@ -2,7 +2,7 @@ import type { PaymentMessageToken } from '@/enums/payment/payment-message-token'
 import type { PaymentStatus } from '@/enums/payment/PaymentStatus.enum'
 import type { Bank } from './Bank.model'
 
-export interface GetPaymentDetailsResponse {
+export interface GetPaymentResponse {
     transactionId?: string
     exchangeOrderNo: string
     orderNo: string

@@ -20,15 +20,26 @@ const router = createRouter({
             redirect: '/receipt',
         },
         {
+            path: '/payment',
+            name: 'payment',
+            children: [
+                {
+                    path: '',
+                    name: 'payment listing',
+                    component: () => import('../views/Payments/ListingView.vue'),
+                },
+                {
+                    path: 'bill',
+                    name: 'payment bill',
+                    component: () => import('../views/Payments/BillView.vue'),
+                },
+            ],
+        },
+        {
             path: '/receipt',
             name: 'receipt',
             component: () => import('../views/ReceiptView.vue'),
             props: (route) => ({ query: route.query }),
-        },
-        {
-            path: '/:billId',
-            name: 'bill',
-            component: () => import('../views/BillView.vue'),
         },
     ],
 })
