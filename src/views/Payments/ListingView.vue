@@ -4,6 +4,14 @@ import MainLayout from '@/components/layouts/MainLayout.vue'
 // import { PaymentStatus } from '@/enums/payment/PaymentStatus.enum'
 import type { GetPaymentResponse } from '@/models/payment/GetPaymentResponse.model.ts'
 import { onMounted, ref, watch } from 'vue'
+// Simple debounce implementation
+function debounce(fn: (...args: any[]) => void, delay: number) {
+    let timer: ReturnType<typeof setTimeout> | null = null
+    return (...args: any[]) => {
+        if (timer) clearTimeout(timer)
+        timer = setTimeout(() => fn(...args), delay)
+    }
+}
 import { Input } from '@/components/ui/input'
 import { ChevronDown, ChevronUp } from 'lucide-vue-next'
 import {
@@ -17,6 +25,12 @@ import {
 import { PaymentService } from '@/services/payment.service'
 import type { Pagination } from '@/models/shared/pagination.model'
 import SharedPagination from '@/components/shared/SharedPagination.vue'
+import { PaymentMessageToken } from '@/enums/payment/payment-message-token'
+import SharedMultiSelect from '@/components/shared/SharedMultiSelect.vue'
+import type { Dropdown } from '@/models/shared/dropdown.model'
+import { PaymentStatus } from '@/enums/payment/PaymentStatus.enum'
+import type { GetPaymentQuery } from '@/models/payment/GetPaymentQuery.model'
+import { Form } from 'vee-validate'
 
 const initialValues = {
     transactionId: '',
@@ -24,13 +38,13 @@ const initialValues = {
     orderNo: '',
     referenceNo: '',
     description: '',
-    type: '',
+    type: [] as Dropdown<string>[],
     payerEmail: '',
     payerPhone: '',
     payerName: '',
     sellerId: '',
     exchangeId: '',
-    status: '',
+    status: [] as Dropdown<string>[],
 }
 
 const paymentService = new PaymentService()
@@ -43,13 +57,36 @@ const pagination = ref<Pagination>({
     total: 0,
 })
 const payments = ref<GetPaymentResponse[]>([])
-const isFirst = ref(true)
+const paymentTypeOptions = Object.values(PaymentMessageToken).map((type) => ({
+    label: type,
+    value: type,
+})) as Dropdown<string>[]
+const paymentStatusOptions = Object.entries(PaymentStatus).map(([key, _]) => ({
+    label: key,
+    value: key,
+})) as Dropdown<string>[]
+
+onMounted(() => {
+    getPayments()
+})
+
+const resetFilters = () => {
+    query.value = { ...initialValues }
+}
 
 const getPayments = () => {
+    const sendQuery: GetPaymentQuery = {
+        ...query.value,
+        type: query.value.type.map((t) => t.value),
+        status: query.value.status.map((s) => s.value),
+    }
     paymentService
-        .getPayments(pagination.value.currentPage - 1, pagination.value.pageSize)
+        .getPayments(
+            (pagination.value.currentPage - 1) * pagination.value.pageSize,
+            pagination.value.pageSize,
+            sendQuery,
+        )
         .then((response) => {
-            console.log('Fetched payments:', response)
             pagination.value.total = response.totalCount
             payments.value = response.data ?? []
         })
@@ -58,27 +95,12 @@ const getPayments = () => {
         })
 }
 
-watch(
-    [pagination],
-    () => {
-        if (isFirst.value) {
-            isFirst.value = false
-            return
-        }
-
-        getPayments()
-    },
-    { deep: true },
-)
-
-onMounted(() => {
-    getPayments()
-})
+const debouncedGetPayments = debounce(getPayments, 500)
 </script>
 
 <template>
     <MainLayout>
-        <div class="p-4">
+        <Form @submit="getPayments" class="p-4">
             <h1 class="text-2xl font-bold">Payment</h1>
             <div class="rounded-md p-4 bg-white shadow mt-4">
                 <div class="flex gap-4">
@@ -87,81 +109,101 @@ onMounted(() => {
                         :class="{ 'is-hidden': !isExpanded }"
                     >
                         <div>
-                            <label for="transactionId">Transaction ID</label>
+                            <label class="text-xs" for="transactionId">Transaction ID</label>
                             <Input v-model="query.transactionId" />
                         </div>
                         <div>
-                            <label for="exchangeOrderNo">Exchange Order No</label>
+                            <label class="text-xs" for="exchangeOrderNo">Exchange Order No</label>
                             <Input v-model="query.exchangeOrderNo" />
                         </div>
                         <div>
-                            <label for="orderNo">Order No</label>
+                            <label class="text-xs" for="orderNo">Order No</label>
                             <Input v-model="query.orderNo" />
                         </div>
                         <div>
-                            <label for="referenceNo">Reference No</label>
+                            <label class="text-xs" for="referenceNo">Reference No</label>
                             <Input v-model="query.referenceNo" />
                         </div>
                         <div>
-                            <label for="type">Type</label>
-                            <Input v-model="query.type" />
+                            <label class="text-xs" for="type">Payment Type</label>
+                            <SharedMultiSelect
+                                v-model="query.type"
+                                :options="paymentTypeOptions"
+                                popover-trigger-class="w-full"
+                            />
                         </div>
                         <div>
-                            <label for="payerEmail">Payer Email</label>
+                            <label class="text-xs" for="payerEmail">Payer Email</label>
                             <Input v-model="query.payerEmail" />
                         </div>
                         <div>
-                            <label for="payerPhone">Payer Phone</label>
+                            <label class="text-xs" for="payerPhone">Payer Phone</label>
                             <Input v-model="query.payerPhone" />
                         </div>
                         <div>
-                            <label for="payerName">Payer Name</label>
+                            <label class="text-xs" for="payerName">Payer Name</label>
                             <Input v-model="query.payerName" />
                         </div>
                         <div>
-                            <label for="sellerId">Seller ID</label>
+                            <label class="text-xs" for="sellerId">Seller ID</label>
                             <Input v-model="query.sellerId" />
                         </div>
                         <div>
-                            <label for="exchangeId">Exchange ID</label>
+                            <label class="text-xs" for="exchangeId">Exchange ID</label>
                             <Input v-model="query.exchangeId" />
                         </div>
                         <div>
-                            <label for="status">Status</label>
-                            <Input v-model="query.status" />
+                            <label class="text-xs" for="status">Status</label>
+
+                            <SharedMultiSelect
+                                v-model="query.status"
+                                :options="paymentStatusOptions"
+                                popover-trigger-class="w-full"
+                            />
                         </div>
                     </div>
-                    <Button variant="outline" @click="isExpanded = !isExpanded" class="mt-6">
+                    <Button
+                        type="button"
+                        variant="outline"
+                        @click="isExpanded = !isExpanded"
+                        class="mt-6"
+                    >
                         <ChevronDown v-if="!isExpanded" />
                         <ChevronUp v-if="isExpanded" />
                     </Button>
                 </div>
             </div>
             <div class="flex justify-end gap-2 mt-4">
-                <Button class="w-32 shadow">Search</Button>
-                <Button variant="outline" class="w-32 shadow">Clear</Button>
+                <Button class="w-32 shadow" type="button">Search</Button>
+                <Button @click="resetFilters" variant="outline" class="w-32 shadow" type="reset"
+                    >Clear</Button
+                >
             </div>
-            <div class="rounded-md shadow-md mt-4 bg-white p-4">
+            <div class="rounded-md shadow-md mt-4 p-4 bg-white">
                 <Table class="overflow-auto min-w-7xl">
                     <TableHeader>
                         <TableRow>
-                            <TableHead>Transaction Id</TableHead>
-                            <TableHead>Exchange Order No</TableHead>
-                            <TableHead>Order No</TableHead>
-                            <TableHead>Reference No</TableHead>
-                            <TableHead>Type</TableHead>
-                            <TableHead>Payer Email</TableHead>
-                            <TableHead>Payer Phone</TableHead>
-                            <TableHead>Payer Name</TableHead>
-                            <TableHead>Seller ID</TableHead>
-                            <TableHead>Exchange ID</TableHead>
-                            <TableHead>Status</TableHead>
+                            <TableHead class="!text-gray-400/80 !font-bold"
+                                >Transaction Id</TableHead
+                            >
+                            <TableHead class="!text-gray-400/80 !font-bold"
+                                >Exchange Order No</TableHead
+                            >
+                            <TableHead class="!text-gray-400/80 !font-bold">Order No</TableHead>
+                            <TableHead class="!text-gray-400/80 !font-bold">Reference No</TableHead>
+                            <TableHead class="!text-gray-400/80 !font-bold">Type</TableHead>
+                            <TableHead class="!text-gray-400/80 !font-bold">Payer Email</TableHead>
+                            <TableHead class="!text-gray-400/80 !font-bold">Payer Phone</TableHead>
+                            <TableHead class="!text-gray-400/80 !font-bold">Payer Name</TableHead>
+                            <TableHead class="!text-gray-400/80 !font-bold">Seller ID</TableHead>
+                            <TableHead class="!text-gray-400/80 !font-bold">Exchange ID</TableHead>
+                            <TableHead class="!text-gray-400/80 !font-bold">Status</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         <TableRow v-for="payment in payments" :key="payment.transactionId">
                             <TableCell>
-                                {{ payment.transactionId }}
+                                {{ payment.transactionId || '-' }}
                             </TableCell>
                             <TableCell>{{ payment.exchangeOrderNo }}</TableCell>
                             <TableCell>{{ payment.orderNo }}</TableCell>
@@ -177,11 +219,19 @@ onMounted(() => {
                     </TableBody>
                 </Table>
 
-                <div class="flex justify-end mt-4">
-                    <SharedPagination v-model:value="pagination" />
+                <div class="flex justify-end items-center mt-4">
+                    <SharedPagination
+                        :value="pagination"
+                        @update:modelValue="
+                            (newValue: Pagination) => {
+                                pagination = newValue
+                                getPayments()
+                            }
+                        "
+                    />
                 </div>
             </div>
-        </div>
+        </Form>
     </MainLayout>
 </template>
 

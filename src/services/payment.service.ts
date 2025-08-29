@@ -6,6 +6,7 @@ import type { GetPaymentResponse } from '@/models/payment/GetPaymentResponse.mod
 import type { GetPaymentReceiptRequest } from '@/models/payment/GetPaymentReceiptRequest.model'
 import axios from 'axios'
 import type { PaginatedResponse } from '@/models/shared/paginated-response.model'
+import type { GetPaymentQuery } from '@/models/payment/GetPaymentQuery.model'
 
 export class PaymentService {
     private apiUrl = `${AppConfig.API_URL}/payments`
@@ -63,11 +64,23 @@ export class PaymentService {
     public async getPayments(
         skip: number,
         take: number,
+        query: GetPaymentQuery,
     ): Promise<PaginatedResponse<GetPaymentResponse>> {
         const url = new URL(this.apiUrl)
 
         url.searchParams.append('skip', skip.toString())
         url.searchParams.append('take', take.toString())
+
+        Object.entries(query).forEach(([key, value]) => {
+            if (Array.isArray(value) && value.length > 0) {
+                url.searchParams.append(key, value.join(','))
+                return
+            }
+
+            if (value) {
+                url.searchParams.append(key, value)
+            }
+        })
 
         const config = {
             method: 'get',
