@@ -11,17 +11,17 @@ import {
     NumberFieldInput,
 } from './components/ui/number-field'
 import {
-    ShadSelect,
-    ShadSelectContent,
-    ShadSelectGroup,
-    ShadSelectItem,
-    ShadSelectItemText,
-    ShadSelectLabel,
-    ShadSelectScrollDownButton,
-    ShadSelectScrollUpButton,
-    ShadSelectSeparator,
-    ShadSelectTrigger,
-    ShadSelectValue,
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectItemText,
+    SelectLabel,
+    SelectScrollDownButton,
+    SelectScrollUpButton,
+    SelectSeparator,
+    SelectTrigger,
+    SelectValue,
 } from './components/ui/select'
 import { Checkbox } from './components/ui/checkbox'
 import { Button } from './components/ui/button'
@@ -71,17 +71,17 @@ export const RegisterComponent = (app: App<Element>) => {
     app.component('NumberFieldDecrement', NumberFieldDecrement)
     app.component('NumberFieldIncrement', NumberFieldIncrement)
     app.component('NumberFieldInput', NumberFieldInput)
-    app.component('ShadSelect', ShadSelect)
-    app.component('ShadSelectContent', ShadSelectContent)
-    app.component('ShadSelectGroup', ShadSelectGroup)
-    app.component('ShadSelectItem', ShadSelectItem)
-    app.component('ShadSelectItemText', ShadSelectItemText)
-    app.component('ShadSelectLabel', ShadSelectLabel)
-    app.component('ShadSelectScrollDownButton', ShadSelectScrollDownButton)
-    app.component('ShadSelectScrollUpButton', ShadSelectScrollUpButton)
-    app.component('ShadSelectSeparator', ShadSelectSeparator)
-    app.component('ShadSelectTrigger', ShadSelectTrigger)
-    app.component('ShadSelectValue', ShadSelectValue)
+    app.component('Select', Select)
+    app.component('SelectContent', SelectContent)
+    app.component('SelectGroup', SelectGroup)
+    app.component('SelectItem', SelectItem)
+    app.component('SelectItemText', SelectItemText)
+    app.component('SelectLabel', SelectLabel)
+    app.component('SelectScrollDownButton', SelectScrollDownButton)
+    app.component('SelectScrollUpButton', SelectScrollUpButton)
+    app.component('SelectSeparator', SelectSeparator)
+    app.component('SelectTrigger', SelectTrigger)
+    app.component('SelectValue', SelectValue)
     app.component('Table', Table)
     app.component('TableBody', TableBody)
     app.component('TableCaption', TableCaption)
