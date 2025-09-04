@@ -47,6 +47,12 @@ const router = createRouter({
             component: () => import('../views/ReceiptView.vue'),
             props: (route) => ({ query: route.query }),
         },
+        {
+            path: '/fpx/stg/service',
+            name: 'fpx service staging',
+            component: () => import('../views/FpxStgServiceView.vue'),
+            props: (route) => ({ query: route.query }),
+        },
     ],
 })
 
