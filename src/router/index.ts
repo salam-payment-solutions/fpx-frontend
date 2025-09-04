@@ -41,6 +41,12 @@ const router = createRouter({
             component: () => import('../views/ReceiptView.vue'),
             props: (route) => ({ query: route.query }),
         },
+        {
+            path: '/fpx/stg/return',
+            name: 'fpx return staging',
+            component: () => import('../views/ReceiptView.vue'),
+            props: (route) => ({ query: route.query }),
+        },
     ],
 })
 
