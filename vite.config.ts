@@ -10,12 +10,12 @@ import path from 'node:path'
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, process.cwd(), '')
     const plugins: PluginOption[] = [vue(), vueJsx(), tailwindcss(), svgLoader()]
-    
+
     // Only add DevTools in development mode
     if (mode === 'development') {
         plugins.push(vueDevTools())
     }
-    
+
     return {
         plugins,
         resolve: {
