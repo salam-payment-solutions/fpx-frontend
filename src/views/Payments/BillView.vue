@@ -105,11 +105,8 @@ const onSubmit = form.handleSubmit(async (values) => {
     <div class="flex min-h-screen min-w-screen bg-gray-100 p-4">
         <div class="max-w-md mx-auto p-6 bg-white rounded shadow h-fit">
             <h1 class="text-2xl font-bold">{{ billData.title }}</h1>
-            <img
-                :src="billData.imageLink"
-                :alt="billData.title"
-                class="w-full h-48 object-contain mt-4 rounded-md border"
-            />
+            <img :src="billData.imageLink" :alt="billData.title"
+                class="w-full h-48 object-contain mt-4 rounded-md border" />
             <p class="mt-4">{{ billData.description }}</p>
 
             <hr class="my-4" />
@@ -120,15 +117,10 @@ const onSubmit = form.handleSubmit(async (values) => {
                         <FormLabel class="label-required">Amount (RM)</FormLabel>
                         <div class="flex items-center">
                             <FormControl class="flex-1">
-                                <NumberField
-                                    :default-value="0"
-                                    :min="0"
-                                    :max="99999999999999.99"
-                                    :step="0.01"
+                                <NumberField :default-value="0" :min="0" :max="99999999999999.99" :step="0.01"
                                     :format-options="{
                                         minimumFractionDigits: 2,
-                                    }"
-                                >
+                                    }">
                                     <NumberFieldContent>
                                         <NumberFieldInput v-bind="componentField" />
                                     </NumberFieldContent>
@@ -174,12 +166,8 @@ const onSubmit = form.handleSubmit(async (values) => {
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem
-                                        v-for="payment in paymentTypes"
-                                        :key="`payment-type-${payment.value}`"
-                                        :value="payment.value"
-                                        >{{ payment.name }}</SelectItem
-                                    >
+                                    <SelectItem v-for="payment in paymentTypes" :key="`payment-type-${payment.value}`"
+                                        :value="payment.value">{{ payment.name }}</SelectItem>
                                 </SelectContent>
                             </Select>
                         </FormControl>
@@ -195,12 +183,8 @@ const onSubmit = form.handleSubmit(async (values) => {
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItemText
-                                        v-for="bank in bankList"
-                                        :key="`bank-id-${bank.id}`"
-                                        :value="bank.code"
-                                        >{{ bank.displayName }}</SelectItemText
-                                    >
+                                    <SelectItemText v-for="bank in bankList" :key="`bank-id-${bank.id}`"
+                                        :value="bank.code">{{ bank.displayName }}</SelectItemText>
                                 </SelectContent>
                             </Select>
                         </FormControl>
@@ -212,15 +196,10 @@ const onSubmit = form.handleSubmit(async (values) => {
                         <div class="flex mt-4">
                             <FormControl>
                                 <Checkbox v-bind="componentField" />
-                                <FormLabel class="ml-2 label-required"
-                                    >I agree to the
-                                    <a
-                                        href="https://www.mepsfpx.com.my/FPXMain/termsAndConditions.jsp"
-                                        target="_blank"
-                                        class="text-primary font-bold underline"
-                                        >Terms and Conditions</a
-                                    ></FormLabel
-                                >
+                                <FormLabel class="ml-2 label-required">I agree to the
+                                    <a href="https://www.mepsfpx.com.my/FPXMain/termsAndConditions.jsp" target="_blank"
+                                        class="text-primary font-bold underline">Terms and Conditions</a>
+                                </FormLabel>
                             </FormControl>
                         </div>
                         <FormMessage />
@@ -228,11 +207,7 @@ const onSubmit = form.handleSubmit(async (values) => {
                 </FormField>
                 <Button type="submit" class="mt-4 w-full"> Submit </Button>
                 <a href="https://www.paynet.my/personal-fpx.html">
-                    <img
-                        src="../assets/images/fpx-logo.png"
-                        alt="FPX logo"
-                        class="h-10 w-auto mt-4 mx-auto"
-                    />
+                    <img src="@/assets/images/fpx-logo.png" alt="FPX logo" class="h-10 w-auto mt-4 mx-auto" />
                 </a>
             </form>
         </div>
