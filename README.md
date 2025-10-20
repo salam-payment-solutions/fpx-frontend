@@ -3,6 +3,7 @@
 Payment system for Salam pay. Handle FPX integration and card integration `(coming soon)`
 
 Recommended version:
+
 - node: v24.5.0
 - npm: v11.5.1
 
@@ -46,4 +47,10 @@ npm run test:unit
 
 ```sh
 npm run lint
+```
+
+### Copy Dist file to server
+
+```sh
+scp -r dist/* user@your-server-ip:/var/www/vue-app/
 ```
