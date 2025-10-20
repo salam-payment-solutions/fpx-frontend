@@ -67,7 +67,9 @@ export class PaymentService {
         query: GetPaymentQuery,
     ): Promise<PaginatedResponse<GetPaymentResponse>> {
         if (!this.apiUrl || this.apiUrl === 'undefined/payments') {
-            throw new Error(`Invalid API URL: ${this.apiUrl}. Please ensure VITE_API_URL is properly configured.`)
+            throw new Error(
+                `Invalid API URL: ${this.apiUrl}. Please ensure VITE_API_URL is properly configured.`,
+            )
         }
 
         const url = new URL(this.apiUrl)
