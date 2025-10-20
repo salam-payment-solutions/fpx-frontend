@@ -23,6 +23,22 @@ export default defineConfig(async ({ mode }) => {
                 '@': path.resolve(__dirname, './src'),
             },
         },
+        build: {
+            // Reduce memory usage during build
+            rollupOptions: {
+                output: {
+                    manualChunks: {
+                        vendor: ['vue', 'vue-router', 'pinia'],
+                        ui: ['reka-ui', 'lucide-vue-next'],
+                        utils: ['axios', 'date-fns', 'zod'],
+                    },
+                },
+            },
+            // Reduce concurrent processing
+            chunkSizeWarningLimit: 1000,
+            // Disable source maps in production to save memory
+            sourcemap: mode === 'development',
+        },
         server: {
             proxy: {
                 '/api': {
