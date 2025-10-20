@@ -52,5 +52,5 @@ npm run lint
 ### Copy Dist file to server
 
 ```sh
-scp -r dist/* user@your-server-ip:/var/www/fpx-frontend/dist
+scp -i [YOUR_PRIVATE_KEY_FILE] -r dist/* user@your-server-ip:/var/www/fpx-frontend/dist
 ```
