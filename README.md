@@ -52,5 +52,5 @@ npm run lint
 ### Copy Dist file to server
 
 ```sh
-scp -r dist/* user@your-server-ip:/var/www/vue-app/
+scp -r dist/* user@your-server-ip:/var/www/fpx-frontend/dist
 ```
