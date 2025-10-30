@@ -3,6 +3,7 @@ import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import tailwindcss from '@tailwindcss/vite'
 import svgLoader from 'vite-svg-loader'
+import vueDevTools from 'vite-plugin-vue-devtools'
 import path from 'node:path'
 
 // https://vite.dev/config/
@@ -12,8 +13,11 @@ export default defineConfig(async ({ mode }) => {
 
     // Only add DevTools in development mode
     if (mode === 'development') {
-        const { default: vueDevTools } = await import('vite-plugin-vue-devtools')
-        plugins.push(vueDevTools())
+        plugins.push(
+            vueDevTools({
+                launchEditor: 'code',
+            }),
+        )
     }
 
     return {
