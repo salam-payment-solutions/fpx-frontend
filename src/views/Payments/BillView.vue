@@ -14,7 +14,7 @@ import { PaymentConfig } from '@/config/payment.confiig'
 import {
     Select,
     SelectContent,
-    SelectItemText,
+    SelectItem,
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
@@ -183,8 +183,8 @@ const onSubmit = form.handleSubmit(async (values) => {
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItemText v-for="bank in bankList" :key="`bank-id-${bank.id}`"
-                                        :value="bank.code">{{ bank.displayName }}</SelectItemText>
+                                    <SelectItem v-for="bank in bankList" :key="`bank-id-${bank.id}`" :value="bank.code">
+                                        {{ bank.displayName }}</SelectItem>
                                 </SelectContent>
                             </Select>
                         </FormControl>

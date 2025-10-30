@@ -12,13 +12,14 @@ export default defineConfig(async ({ mode }) => {
     const plugins: PluginOption[] = [vue(), vueJsx(), tailwindcss(), svgLoader()]
 
     // Only add DevTools in development mode
-    if (mode === 'development') {
-        plugins.push(
-            vueDevTools({
-                launchEditor: 'code',
-            }),
-        )
-    }
+    // Temporarily disabled due to localStorage error
+    // if (mode === 'development') {
+    //     plugins.push(
+    //         vueDevTools({
+    //             launchEditor: 'code',
+    //         }),
+    //     )
+    // }
 
     return {
         plugins,
