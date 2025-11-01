@@ -56,7 +56,7 @@ const form = useForm({
 const billData = ref({
     imageLink: 'https://i.pinimg.com/736x/eb/23/bf/eb23bfda14bbfe4ad08d6a2b4b4cdb3c.jpg',
     title: 'Gym Membership Fee',
-    description: 'Monthly Gym & Wellness Pass',
+    description: 'Monthly Gym and Wellness Pass',
 })
 
 onMounted(async () => {
@@ -82,12 +82,36 @@ const onSubmit = form.handleSubmit(async (values) => {
 
     await paymentService.createPayment(request).then((response) => {
         const form = document.createElement('form')
-        form.setAttribute('method', 'POST')
+        form.setAttribute('method', 'post')
         form.setAttribute('action', PaymentConfig.FPX_CREATE_PAYMENT_URL)
 
-        console.log('form:', form)
+        let mappedResponse = {
+            fpx_msgType: response.fpx_msgType,
+            fpx_msgToken: response.fpx_msgToken,
+            fpx_sellerExId: response.fpx_sellerExId,
+            fpx_sellerExOrderNo: response.fpx_sellerExOrderNo,
+            fpx_sellerTxnTime: response.fpx_sellerTxnTime,
+            fpx_sellerOrderNo: response.fpx_sellerOrderNo,
+            fpx_sellerId: response.fpx_sellerId,
+            fpx_sellerBankCode: response.fpx_sellerBankCode,
+            fpx_txnCurrency: response.fpx_txnCurrency,
+            fpx_txnAmount: response.fpx_txnAmount,
+            fpx_buyerEmail: response.fpx_buyerEmail,
+            fpx_checkSum: response.fpx_checkSum,
+            fpx_buyerName: response.fpx_buyerName,
+            fpx_buyerBankId: response.fpx_buyerBankId,
+            fpx_buyerBankBranch: response.fpx_buyerBankBranch,
+            fpx_buyerAccNo: response.fpx_buyerAccNo,
+            fpx_buyerId: response.fpx_buyerId,
+            fpx_makerName: response.fpx_makerName,
+            fpx_buyerIban: response.fpx_buyerIban,
+            fpx_productDesc: response.fpx_productDesc,
+            fpx_version: response.fpx_version,
+            fpx_eaccountNum: response.fpx_eaccountNum,
+            fpx_ebuyerID: response.fpx_ebuyerID,
+        }
 
-        Object.entries(response).forEach(([key, value]) => {
+        Object.entries(mappedResponse).forEach(([key, value]) => {
             const input = document.createElement('input')
             input.setAttribute('type', 'hidden')
             input.setAttribute('name', key)
@@ -96,6 +120,8 @@ const onSubmit = form.handleSubmit(async (values) => {
         })
 
         document.body.appendChild(form)
+
+        console.log('form', form);
         form.submit()
     })
 })
