@@ -1,9 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import { paymentRoutes } from './payment'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
+        ...paymentRoutes,
         {
             path: '/',
             name: 'home',
@@ -15,36 +17,15 @@ const router = createRouter({
             component: () => import('../views/AboutView.vue'),
         },
         {
-            path: '/return',
-            name: 'return to receipt',
-            redirect: '/receipt',
-        },
-        {
-            path: '/payment',
-            name: 'payment',
-            children: [
-                {
-                    path: '',
-                    name: 'payment listing',
-                    component: () => import('../views/Payments/ListingView.vue'),
-                },
-                {
-                    path: 'bill',
-                    name: 'payment bill',
-                    component: () => import('../views/Payments/BillView.vue'),
-                },
-            ],
-        },
-        {
             path: '/receipt',
             name: 'receipt',
-            component: () => import('../views/ReceiptView.vue'),
+            component: () => import('../views/Payments/ReceiptView.vue'),
             props: (route) => ({ query: route.query }),
         },
         {
             path: '/fpx/stg/return',
             name: 'fpx return staging',
-            component: () => import('../views/ReceiptView.vue'),
+            component: () => import('../views/Payments/ReceiptView.vue'),
             props: (route) => ({ query: route.query }),
         },
         {

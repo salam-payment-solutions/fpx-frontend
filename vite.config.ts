@@ -45,6 +45,12 @@ export default defineConfig(async ({ mode }) => {
             sourcemap: mode === 'development',
         },
         server: {
+            watch: {
+                usePolling: true,
+            },
+            hmr: {
+                overlay: true,
+            },
             proxy: {
                 '/api': {
                     target: env.VITE_API_URL, // backend server
